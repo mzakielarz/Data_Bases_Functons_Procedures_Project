@@ -1,0 +1,100 @@
+CREATE DATABASE Platforma_dytrybucji_cyfrowej;
+USE Platforma_dytrybucji_cyfrowej;
+
+CREATE TABLE Gatunki (
+  id_gatunku INT PRIMARY KEY,
+  nazwa VARCHAR(40)
+);
+CREATE TABLE Wydawcy (
+  id_wydawcy INT AUTO_INCREMENT,
+  nazwa VARCHAR(40) NOT NULL,
+  kraj VARCHAR(40) NOT NULL,
+  adres VARCHAR(40) NOT NULL,
+  PRIMARY KEY (id_wydawcy)
+);
+CREATE TABLE Użytkownicy (
+  id_uzytkownika INT PRIMARY KEY,
+  login VARCHAR(40) NOT NULL UNIQUE,
+  haslo VARCHAR(40) NOT NULL,
+  stan_konta FLOAT(6,2) NOT NULL
+);
+CREATE TABLE Gry (
+  id_gra INT PRIMARY KEY,
+  tytul VARCHAR(80) NOT NULL,
+  cena FLOAT(6,2) NOT NULL,
+  id_gatunek INT,
+  id_wydawca INT,
+  FOREIGN KEY (id_gatunek) REFERENCES Gatunki(id_gatunku),
+  FOREIGN KEY (id_wydawca) REFERENCES Wydawcy(id_wydawcy)
+);
+CREATE TABLE Gry_Uzytkownicy (
+  id_uzytkownika INT,
+  id_gra INT,
+  PRIMARY KEY (id_uzytkownika, id_gra),
+  FOREIGN KEY (id_uzytkownika) REFERENCES Użytkownicy(id_uzytkownika),
+  FOREIGN KEY (id_gra) REFERENCES Gry(id_gra)
+);
+CREATE TABLE Recenzje (
+  id_recenzji INT AUTO_INCREMENT,
+  id_uzytkownika INT NOT NULL,
+  id_gra INT NOT NULL,
+  ocena INT NOT NULL,
+  tresc TEXT(250),
+  PRIMARY KEY(id_recenzji),
+  FOREIGN KEY (id_uzytkownika) REFERENCES Użytkownicy(id_uzytkownika),
+  FOREIGN KEY (id_gra) REFERENCES Gry(id_gra)
+);
+INSERT INTO Gatunki VALUES (1, "Action-adventure");
+INSERT INTO Gatunki VALUES (2, "RPG");
+INSERT INTO Gatunki VALUES (3,"First Person Shooter");
+INSERT INTO Gatunki VALUES (4,"Tower Defense");
+INSERT INTO Gatunki VALUES (5,"Stealth");
+INSERT INTO Wydawcy VALUES (1,"Rockstar North","Wielka Brytania","Edynburg");
+INSERT INTO Wydawcy VALUES (2,"CD Projekt Red","Polska","Warszawa");
+INSERT INTO Wydawcy VALUES (3,"Bethesda","USA","Rockville");
+INSERT INTO Wydawcy VALUES (4,"EA","USA","Redwood City");
+INSERT INTO Wydawcy VALUES (5,"Overkill","Szwecja","Sztokholm");
+INSERT INTO Wydawcy VALUES (6,"Ninja Kiwi","Nowa Zelandia","Auckland");
+INSERT INTO Wydawcy VALUES (7,"IO Interactive","Dania","Kopenhaga");
+INSERT INTO Użytkownicy (id_uzytkownika, login, haslo, stan_konta)
+VALUES
+  (1, 'uzytkownik1', 'haslo1', 100.00),
+  (2, 'uzytkownik2', 'haslo2', 50.00),
+  (3, 'uzytkownik3', 'haslo3', 200.00),
+  (4, 'uzytkownik4', 'haslo4', 150.00),
+  (5, 'uzytkownik5', 'haslo5', 300.00),
+  (6, 'uzytkownik6', 'haslo6', 75.00),
+  (7, 'uzytkownik7', 'haslo7', 250.00),
+  (8, 'uzytkownik8', 'haslo8', 175.00),
+  (9, 'uzytkownik9', 'haslo9', 400.00),
+  (10, 'uzytkownik10', 'haslo10', 125.00);
+INSERT INTO Gry VALUES (1, "Red Dead Redemption 2",129.99,1,1);
+INSERT INTO Gry VALUES (2, "Cyberpunk 2077",200.00,2,2);
+INSERT INTO Gry VALUES (3, "The Elder Scrolls V: Skyrim",99.99,2,3);
+INSERT INTO Gry VALUES (4, "Battlefield 4",149.99,3,4);
+INSERT INTO Gry VALUES (5, "GTA V",89.99,1,1);
+INSERT INTO Gry VALUES (6,"Fallout: New Vegas",49.99,2,3);
+INSERT INTO Gry VALUES (7,"STAR WARS Jedi: Fallen Order",179.99,1,4);
+INSERT INTO Gry VALUES (8,"PAYDAY 2",34.99,3,3);
+INSERT INTO Gry VALUES (9,"Bloons TD 6",49.99,4,5);
+INSERT INTO Gry VALUES (10,"Hitman 3",324.99,5,6);
+INSERT INTO Recenzje (id_uzytkownika, id_gra, ocena, tresc)
+VALUES
+  (1, 1, 5, 'Bardzo dobra gra!'),
+  (2, 1, 4, 'Ciekawa fabuła, polecam.'),
+  (3, 2, 3, 'Przeciętna gra, nie warta ceny.'),
+  (4, 3, 5, 'Wciągająca rozgrywka.'),
+  (5, 3, 2, 'Nudna gra, nie polecam.'),
+  (6, 4, 4, 'Świetne efekty wizualne.'),
+  (7, 5, 5, 'Jedna z najlepszych gier, jakie grałem.'),
+  (8, 6, 3, 'Troszkę rozczarowująca.'),
+  (9, 7, 4, 'Warte uwagi.'),
+  (10, 7, 5, 'Nie mogłem się oderwać od gry!');
+INSERT INTO Gry_Uzytkownicy VALUES (9,2);
+INSERT INTO Gry_Uzytkownicy VALUES (3,7);
+INSERT INTO Gry_Uzytkownicy VALUES (4,9);
+INSERT INTO Gry_Uzytkownicy VALUES (5,2);
+INSERT INTO Gry_Uzytkownicy VALUES (1,5);
+INSERT INTO Gry_Uzytkownicy VALUES (8,4);
+INSERT INTO Gry_Uzytkownicy VALUES (10,8);
+INSERT INTO Gry_Uzytkownicy VALUES (7,6);
